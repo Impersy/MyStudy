@@ -153,6 +153,80 @@ int main()
 #pragma endregion
 
 
+#pragma region 연습문제1
+
+    // 입력값을 받을때 
+    // cin >> 변수이름 ;    (이렇게 하면 사용자가 입력한 값이 변수로 들어감)
+
+    // 출력할때
+    // cout << " " ;        (endl은 줄바꿈이라는 뜻)
+
+    // 별찍기(n*n 모양)
+
+    // int n = 0;
+    // cin >> n;
+
+//for (int i = 0; i < n; i++) {
+
+//    for (int j = 0; j < n; j++) {
+
+//        cout << "*";
+//    }
+//    cout << endl;
+//}
+
+// 별찍기(n피라미드)  >>> 할떄마다 어렵고 헷갈림 2중포문인지 3중인지 잘 생각
+
+//for (int i = 0; i < n; i++) {
+//
+//    for (int j = 0; j < n - i - 1; j++) {
+//        cout << " ";
+//    }
+//    for (int k = 0; k < 2 * i + 1; k++) {
+//        cout << "*";
+//    }
+//    cout << endl;
+//}
+
+// 별찍기 (심화) n피라미드 군집   >>> 3중포문을 사용
+
+
+int p = 0;
+
+cin >> p;
+
+for (int s = 0; s < p; s++) {
+
+    for (int i = 0; i < s + 1; i++) {
+        for (int j = 0; j < s - i; j++) {
+            cout << ' ';
+        }
+        for (int k = 0; k < 2 * i + 1; k++) {
+            cout << '*';
+        }
+        cout << endl;
+    }
+
+    cout << endl;
+    cout << endl;
+}
+
+
+
+
+
+
+#pragma endregion
+
+
+
+
+
+
+
+
+
+
 
     return 0;
 }
