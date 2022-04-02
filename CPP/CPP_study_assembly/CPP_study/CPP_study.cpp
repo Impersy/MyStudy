@@ -187,7 +187,7 @@ using namespace std;
 //  LABEL_SUM:
 //     inc ecx
 //     add ebx, ecx
-//     cmp ebx,eax
+//     cmp ecx, eax
 //     jne LABEL_SUM
 // 
 //  PRINT_DEC 4, ebx
