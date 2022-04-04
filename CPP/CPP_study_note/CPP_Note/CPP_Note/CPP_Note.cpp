@@ -2,423 +2,118 @@
 #include <time.h>
 using namespace std;
 
-// ctrl + K + C 주석달기 , ctrl + K + U 주석풀기
+	void COUT(int a) {
+		cout << "계산된 숫자는" << a << "입니다." << endl;
+	}
+	int SUM(int a, int b) {
+		int c = a + b;
+		return c;
+	}
+	int SUB(int a, int b) {
+		int c = a - b;
+		return c;
+	}
+	int MUL(int a, int b) {
+		int c = a * b;
+		return c;
+	}
 
+	// F5      디버깅 모드 실행 (중단점에서만 스탑)
+	// F10     함수단위로 실행 (main에서 다른함수로 넘어가지 않음)
+	// F11     코드한줄 단위로 실행 (어셈블리처럼 한줄한줄 순서대로 넘어감)
 
-// #define   (#이 붙은거 >> 전처리 지시문)
-#define ROCK 2         //  2 를 DEF_ROCK 으로 대체
-#define TEST cout<<"Hello"<<endl;   // 코드문장 자체를 TEST로 대체
+	// 함수를 호출할때 (매개변수 반환주소값(이전함수주소) 지역변수) 순으로 스택메모리에서 
+	// 함수끼리 메모장 처럼 이용한다. 함수마다 스택프레임이 있다,
 
-// 전처리 -> 컴파일 -> 링크 순으로 프로그램이 진행되는데
-// 전처리 단계에서 끝내버려서 컴파일 단계에서는 사실 TEST라는 건 없어지고 cout<<"Hello"<<endl 가 복붙된거라
-// 디버깅하기도 까다롭다.
 
-int main()
-{
+	// 전역변수
+	// 함수 외부에서 선언하는 변수
+	// 어디서든 전역변수에 접근할수있다.
 
-#pragma region 분기문
-    //분기문
+	// 지역변수
+	// 함수 내부에서 선언하여 사용하는 변수
+	// 함수내에서만 유효하고 함수내부에서만 접근가능하다.
 
-    //int hp = 100;  // 몬스터 체력
-    //int dmg = 10;  // 플레이어 데미지
-    //int exp = 0;   // 플레이어 경험치
-    //int level = 1; // 플레이어 레벨
 
-    //while (hp > 0) {
 
-    //    hp -= dmg;  // 피격판정
+	// 지역변수와 값 전달
+	// main함수의 지역변수의 값을 어떤 함수의 매개변수로 전달하여서
+	// 그 함수내에서 값을 변경하였다 하더라도 
+	// main함수에서의 지역변수값은 변하지 않는다.
+	// 단지 값을 복사하여 조작하고 그걸 반환해주는것일뿐
 
-    //    bool isDead = (hp <= 0);  // 처치판정
+	// 함수내에서 선언한 변수를 함수내에서 직접 바꾸는 것을 직접참조
+	// 함수 밖에서 간접적으로 접근하여 바꾸는 걸 간접참조라 한다.
+	// 변수의 주소값에 접근하여 간접적으로 참조할수있게 해주는 것이 포인터 변수다.
 
-    //    // 몬스터가 죽으면 경험치 추가
 
-    //    if (isDead) {
+	//// 호출스택
 
-    //        cout << "몬스터를 처치했습니다.(+exp10)\n" << endl;
-    //        exp += 10;
-    //        cout << "현재 총 경험치:" << exp << "\n현재 레벨:" << level << endl;
-    //        if (exp >= 50) {
-    //            level = 6;
-    //            cout << "----레벨업~!!!----\n" << "level:" << level << endl;
-    //        }
-    //        else if (exp >= 40) {
-    //            level = 5;
-    //            cout << "----레벨업~!!!----\n" << "level:" << level << endl;
-    //        }
-    //        else if (exp >= 30) {
-    //            level = 4;
-    //            cout << "----레벨업~!!!----\n" << "level:" << level << endl;
-    //        }
-    //        else if (exp >= 20) {
-    //            level = 3;
-    //            cout << "----레벨업~!!!----\n" << "level:" << level << endl;
-    //        }
-    //        else if (exp >= 10) {
-    //            level = 2;
-    //            cout << "----레벨업~!!!----\n" << "level:" << level << endl;
-    //        }
+	void Func1();                // 함수선언
+	void Func2();
 
-    //    }
-    //    else {
-    //        cout << "몬스터를 처치하지 못했습니다.\n남은 체력은" << hp << "입니다.\n" << endl;
-    //    }
+	void Func1() {
+		Func2();                 // 호출
+	}
+	void Func2() {
+		cout << "Hello";
+	}
+	// C++에서는 윗줄부터 순자척으로 컴파일하기때문에 Func2 함수선언를 만나기전에는
+	// Func2(); 를 이해하지 못한다.
 
-    //}
+	// 따라서 함수를 쓸때 함수선언을 맨 위에 먼저하고 함수의 구현은 main아래에 쓴다.
 
-    // 스위치-케이스 (가위바위보)
+	// 함수가 엄청 많아지고 서로 엮이다보면 그 흐름을 종잡을수없게된다.
+	// 따라서 호출스택을 이용해서 흐름을 파악한다.
 
-    //const int ROCK = 0;
-    //const int PAPER = 1;
-    //const int SCISSORS = 2;
 
-    //int input = 0;
+	//// 함수 마무리(추가정보)
 
-    //switch (input) {             // ()에 정수만 넣을수있다.
 
-    //  case ROCK:
-    //      cout << "바위를 냈습니다." << endl;
-    //      break;
-    //  case PAPER:
-    //      cout << "보를 냈습니다." << endl;
-    //      break;
-    //  case SCISSORS:
-    //      cout << "가위를 냈습니다." << endl;
-    //      break;
-    //  default:
-    //      cout << "뭘 낸겁니까?" << endl;
-    //      break;
-    //}
+	//// 오버로딩 (중복정의) = 함수이름의 재사용
+	// 매개변수 개수나 타입이 다르다거나하여(인풋과 관련된 부분)
+	// 같은 이름의 함수 2개를 구분할수있으면 이름을 재사용할수있다.
+	// 반환형식만 다른 함수는 구분할수없다.
 
 
-#pragma endregion    
+	//// 기본인자값
+	void PlayerSet(int hp, int dmg, int level, int item = 0) {
 
+	}
+	// item은 입력을 안해도 그냥 0으로 인식
+	// 그러나 기본값을 설정하는 매개변수는 맨끝에 와야함 그래야 편하다.
 
-#pragma region 반복문
 
-    //// while 문
+	//// 스택오버플로우
+	// 너무 많은 함수호출때문에 스택메모리가 가득차서 크래시가 남
+	// 팩토리얼 재귀함수
+	int Factorial(int n) {
 
-    //int count = 0;
+		if (n <= 1) {
+			return 1;
+		}
+		return n * Factorial(n - 1);
+	}
+	// n이 너무 커지면 스택메모리가 부족하여 오류가 남
 
-    //while (count<5){
 
-    //    cout << "Hello world\n" << endl;
-    //    count++;
-    //}
+	int main()
+	{
+		int a = 3;
+		int b = 4;
 
-    //// do_while 문 (잘 사용하지 않음)
+		int sum = SUM(a, b);
 
-    //do {
-    //    cout << "Helo world\n" << endl;
-    //    count++;
+		int sub = SUB(a, b);
 
-    //} while (count<5);
+		int sub2 = SUB(b, a);
 
+		int mul = MUL(a, b);
 
-    //// for 문
+		cout << sum << " " << sub << " " << sub2 << " " << mul << endl;
 
-    //for (int i = 0; i < 5; i++) {
-
-    //    cout << "Helo world\n" << endl;
-
-    //}
-
-
-    //// 루프문의 흐름제어
-
-    // break;
-    // 걸려있는 해당 루프문을 탈출한다.
-
-    // continue;
-    // continue를 만나면 그 아래부분은 실행하지않고 
-    // 넘겨서 루프문의 다음 파트 실행
-
-    //int round = 1;
-    //int hp = 100;
-    //int dmg = 10;
-
-
-
-    //// 무한루프에서 break 활용
-    
-    //while (1) {
-    //    hp -= dmg;
-    //    if (hp < 0){
-    //        hp = 0;
-    //    }
-    //    cout << "Round" << round << " HP" << hp << endl;
-
-    //    if (hp == 0) {
-    //        break;           // if문을 나가라는 뜻이 아니고 while문을 나감
-    //    }
-    //    
-    //    if (round == 5) {
-    //        break;
-    //    }
-    //    round++;
-    //}
-
-#pragma endregion
-
-
-#pragma region 연습문제1
-
-    // 입력값을 받을때 
-    // cin >> 변수이름 ;    (이렇게 하면 사용자가 입력한 값이 변수로 들어감)
-
-    // 출력할때
-    // cout << " " ;        (endl은 줄바꿈이라는 뜻)
-
-    // 별찍기(n*n 모양)
-
-    // int n = 0;
-    // cin >> n;
-
-//for (int i = 0; i < n; i++) {
-
-//    for (int j = 0; j < n; j++) {
-
-//        cout << "*";
-//    }
-//    cout << endl;
-//}
-
-// 별찍기(n피라미드)  >>> 할떄마다 어렵고 헷갈림 2중포문인지 3중인지 잘 생각
-
-//for (int i = 0; i < n; i++) {
-//
-//    for (int j = 0; j < n - i - 1; j++) {
-//        cout << " ";
-//    }
-//    for (int k = 0; k < 2 * i + 1; k++) {
-//        cout << "*";
-//    }
-//    cout << endl;
-//}
-
-// 별찍기 (심화) n피라미드 군집   >>> 3중포문을 사용
-
-//
-//int p = 0;
-//
-//cin >> p;
-//
-//for (int s = 0; s < p; s++) {
-//
-//    for (int i = 0; i < s + 1; i++) {
-//        for (int j = 0; j < s - i; j++) {
-//            cout << ' ';
-//        }
-//        for (int k = 0; k < 2 * i + 1; k++) {
-//            cout << '*';
-//        }
-//        cout << endl;
-//    }
-//
-//    cout << endl;
-//    cout << endl;
-//}
-
-
-
-
-
-
-#pragma endregion
-
-
-
-#pragma region 연습문제2
-
-// 구구단 (1단~9단)
-
-//for (int i = 0; i < 9; i++) {
-//
-//    for (int j = 0; j < 9; j++) {
-//        cout << (i + 1) << " x " << (j + 1) << "=" << (i + 1) * (j + 1) << endl;
-//    }
-//}
-
-
-// 가위바위보 게임
-//
-//const int ROCK = 0;
-//const int PAPER = 1;
-//const int SCISSORS = 2;
-//
-//int input = 0;
-//
-//float wins = 0;
-//int total = 0;
-//
-//while (1) {
-//    srand(time(NULL));
-//
-//    // rand()를 쓸떄 항상 해줘야함
-//    // rand();  >> 0~32767  중 랜덤으로 반환
-//
-//    int value = rand() % 3;
-//
-//    // % 3 을 해주면 rand()를 3으로 나눈 나머지가
-//    // 0 1 2 중 하나로 나온다. 따라서 0 1 2 3가지중 랜덤으로 반환
-//
-//    cout << "가위(2) 바위(0) 보(1) 중 하나를 입력하세요" << endl;
-//    cin >> input;
-//    total++;
-//
-//    if (input == SCISSORS) {
-//        if (input == value) {
-//            cout << "비겼습니다." << "컴퓨터:" << value << endl;
-//        }
-//        else if (value == ROCK) {
-//            cout << "졌습니다." << "컴퓨터:" << value << endl;
-//        }
-//        else {
-//            cout << "이겼습니다." << "컴퓨터:" << value << endl;
-//            wins++;
-//        }
-//
-//    }
-//    else if (input == ROCK) {
-//        if (input == value) {
-//            cout << "비겼습니다." << "컴퓨터:" << value << endl;
-//        }
-//        else if (value == PAPER) {
-//            cout << "졌습니다." << "컴퓨터:" << value << endl;
-//        }
-//        else {
-//            cout << "이겼습니다." << "컴퓨터:" << value << endl;
-//            wins++;
-//        }
-//
-//    }
-//    else if (input == PAPER) {
-//        if (input == value) {
-//            cout << "비겼습니다." << "컴퓨터:" << value << endl;
-//        }
-//        else if (value == SCISSORS) {
-//            cout << "졌습니다." << "컴퓨터:" << value << endl;
-//        }
-//        else {
-//            cout << "이겼습니다." << "컴퓨터:" << value << endl;
-//            wins++;
-//        }
-//
-//    }
-//    else {
-//        break;
-//    }
-//
-//    if (wins == 0) {
-//        cout << "현재승률은 없습니다" << endl;
-//    }
-//    else {
-//        cout << "현재승률:" << (wins / total) * 100 << "%" << "total:" << total << endl;
-//    }
-//    cout << "\n\n\n";
-//
-//}
-
-
-#pragma endregion 
-
-
-// 열거형  (enum 이 const 나 define 보다 더 좋은 방법) (컴파일단계에서 날아가지 않아서 살펴볼수있고 메모리 공간을 사용하지 않기때문)
-
-enum ENUM_SRP
-{
-    ENUM_SCISSORS = 1,
-    ENUM_ROCK,
-    ENUM_PAPER
-};
-// 숫자를 지정안하면 첫 값은 0으로 자동지정
-// 그 다음값은 이전값 +1 
-
-// 컴퓨터가 ENUM 안의 이름들을 그냥 상수로 인식하기 때문에
-// 메모리를 잡아먹지 않는다
-// 반면 const 를 이용한 것은 경우에 따라 메모리를 이용할수도있다.
-
-
-// 가위바위보 게임
-srand(time(NULL));
-
-int input = 0;
-float wins = 0;
-int total = 0;
-
-while (1) {
-   
-    int value = rand() % 3 + 1;
-
-    cout << "가위(1) 바위(2) 보(3) !!!!!!" << endl;
-
-    cin >> input;
-
-    if (input == ENUM_SCISSORS) {
-
-        if (value == ENUM_SCISSORS) {
-            cout << "비겼습니다" << "  컴퓨터가 낸 값:" << "가위" << endl;
-        }
-        else if (value == ENUM_ROCK) {
-            cout << "졌습니다" << "  컴퓨터가 낸 값:" << "바위" << endl;
-            wins++;
-        }
-        else {
-            cout << "이겼습니다" << "  컴퓨터가 낸 값:" << "보" << endl;
-        }
-    }
-    else if (input == ENUM_ROCK) {
-
-        if (value == ENUM_ROCK) {
-            cout << "비겼습니다" << "  컴퓨터가 낸 값:" << "바위" << endl;
-        }
-        else if (value == ENUM_PAPER) {
-            cout << "졌습니다" << "  컴퓨터가 낸 값:" << "보" << endl;
-            wins++;
-        }
-        else {
-            cout << "이겼습니다" << "  컴퓨터가 낸 값:" << "가위" << endl;
-        }
-    }
-    else if (input == ENUM_PAPER) {
-
-        if (value == ENUM_PAPER) {
-            cout << "비겼습니다" << "  컴퓨터가 낸 값:" << "보" << endl;
-        }
-        else if (value == ENUM_SCISSORS) {
-            cout << "졌습니다" << "  컴퓨터가 낸 값:" << "가위" << endl;
-            wins++;
-        }
-        else {
-            cout << "이겼습니다" << "  컴퓨터가 낸 값:" << "바위" << endl;
-        }
-    }
-    else {
-        break;
-    }
-
-    total++;
-
-    if (wins == 0) {
-        cout << "현재승률은 0입니다" << endl;
-    }
-    else {
-        cout << "현재승률은 : " << (wins / total)*100 << "% 입니다." << endl;
-    }
-    cout << "\n\n" << endl;
-}
-
-//// 다시 혼자 해본 결과 
-//  1. 1,2,3 이 아닌 다른 값을 입력했을때 경우를 빠뜨림 (예외처리)
-//  2. 분기문의 1차 분기기준을 value로 했는데 그럴 경우 2차 분기문에서 끝마다 예외처리(1,2,3이외의 input값)를 해줘야해서
-//     코드가 길어진다. 따라서 첫 기준을 input으로 잡고 시작하는게 더 효율적이다.
-//  3. 기준을 바꿈에 따라 2차 분기문의 논리적 순서가 바뀌었는데 뒤늦게 알아차렸다.(누가 기준인가에 따라 이겼냐 졌냐 달라짐)
-
-
-
-
-
-    return 0;
-}
+		return 0;
+	}
 
 
 
