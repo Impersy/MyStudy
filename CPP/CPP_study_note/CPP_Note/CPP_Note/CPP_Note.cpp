@@ -2,127 +2,212 @@
 #include <time.h>
 using namespace std;
 
-	void COUT(int a) {
-		cout << "계산된 숫자는" << a << "입니다." << endl;
-	}
-	int SUM(int a, int b) {
-		int c = a + b;
-		return c;
-	}
-	int SUB(int a, int b) {
-		int c = a - b;
-		return c;
-	}
-	int MUL(int a, int b) {
-		int c = a * b;
-		return c;
-	}
 
-	// F5      디버깅 모드 실행 (중단점에서만 스탑)
-	// F10     함수단위로 실행 (main에서 다른함수로 넘어가지 않음)
-	// F11     코드한줄 단위로 실행 (어셈블리처럼 한줄한줄 순서대로 넘어감)
+//// text RPG
 
-	// 함수를 호출할때 (매개변수 반환주소값(이전함수주소) 지역변수) 순으로 스택메모리에서 
-	// 함수끼리 메모장 처럼 이용한다. 함수마다 스택프레임이 있다,
+#pragma region 전역변수
+enum PlayerType {
+	PT_Kinght = 1,
+	PT_Archer = 2,
+	PT_Mage = 3
+};
+enum MonsterType {
+	MT_Slime = 1,
+	MT_Orc = 2,
+	MT_Skeleton = 3
+};
+// 구조체 사용
+struct Objectinfo {
+	int Type;
+	int hp;
+	int attack;
+	int defence;
+};
 
+Objectinfo playerinfo;
+Objectinfo monsterinfo;
 
-	// 전역변수
-	// 함수 외부에서 선언하는 변수
-	// 어디서든 전역변수에 접근할수있다.
+#pragma endregion
 
-	// 지역변수
-	// 함수 내부에서 선언하여 사용하는 변수
-	// 함수내에서만 유효하고 함수내부에서만 접근가능하다.
-
-
-
-	// 지역변수와 값 전달
-	// main함수의 지역변수의 값을 어떤 함수의 매개변수로 전달하여서
-	// 그 함수내에서 값을 변경하였다 하더라도 
-	// main함수에서의 지역변수값은 변하지 않는다.
-	// 단지 값을 복사하여 조작하고 그걸 반환해주는것일뿐
-
-	// 함수내에서 선언한 변수를 함수내에서 직접 바꾸는 것을 직접참조
-	// 함수 밖에서 간접적으로 접근하여 바꾸는 걸 간접참조라 한다.
-	// 변수의 주소값에 접근하여 간접적으로 참조할수있게 해주는 것이 포인터 변수다.
+#pragma region 함수선언
+void EnterLobby();
+void SelectPlayer();
+void EnterField();
+void CreateMonster();
+void EnterBettle();
+#pragma endregion
 
 
-	//// 호출스택
+int main()
+{
 
-	void Func1();                // 함수선언
-	void Func2();
+	EnterLobby();
 
-	void Func1() {
-		Func2();                 // 호출
-	}
-	void Func2() {
-		cout << "Hello";
-	}
-	// C++에서는 윗줄부터 순자척으로 컴파일하기때문에 Func2 함수선언를 만나기전에는
-	// Func2(); 를 이해하지 못한다.
+	return 0;
 
-	// 따라서 함수를 쓸때 함수선언을 맨 위에 먼저하고 함수의 구현은 main아래에 쓴다.
-
-	// 함수가 엄청 많아지고 서로 엮이다보면 그 흐름을 종잡을수없게된다.
-	// 따라서 호출스택을 이용해서 흐름을 파악한다.
-
-	// 호출스택은 어셈블리로 까보면 사실 스택에 기록된 반환주소값을 말한다.
-	// 함수를 call하는 부분 바로 다음 add 하는 부분이 반환주소값을 추가하는 부분이다.
+}
 
 
-	//// 함수 마무리(추가정보)
 
+void EnterLobby() {
 
-	//// 오버로딩 (중복정의) = 함수이름의 재사용
-	// 매개변수 개수나 타입이 다르다거나하여(인풋과 관련된 부분)
-	// 같은 이름의 함수 2개를 구분할수있으면 이름을 재사용할수있다.
-	// 반환형식만 다른 함수는 구분할수없다.
+	while (1) {
+		cout << "----------------------" << endl;
+		cout << "로비에 입장하였습니다." << endl;
+		cout << "----------------------" << endl;
 
+		SelectPlayer();
 
-	//// 기본인자값
-	void PlayerSet(int hp, int dmg, int level, int item = 0) {
+		cout << "----------------------" << endl;
+		cout << "(1)필드입장 (2)게임종료" << endl;
+		cout << "----------------------" << endl;
 
-	}
-	// item은 입력을 안해도 그냥 0으로 인식
-	// 그러나 기본값을 설정하는 매개변수는 맨끝에 와야함 그래야 편하다.
-
-
-	//// 스택오버플로우
-	// 너무 많은 함수호출때문에 스택메모리가 가득차서 크래시가 남
-	// 팩토리얼 재귀함수
-	int Factorial(int n) {
-
-		if (n <= 1) {
-			return 1;
+		int input;
+		cin >> input;
+		if (input == 1) {
+			EnterField();
 		}
-		return n * Factorial(n - 1);
+		else {
+			return;
+		}
 	}
-	// n이 너무 커지면 스택메모리가 부족하여 오류가 남
+}
 
+void SelectPlayer()
+{
+	while (1) {
+		cout << "----------------------" << endl;
+		cout << "직업을 선택해주세요." << endl;
+		cout << "기사(1) 궁수(2) 마법사(3)" << endl;
+		cout << "----------------------" << endl;
+		cout << ">";
+		cin >> playerinfo.Type;
+		if (playerinfo.Type == PT_Kinght) {
+			cout << "기사 생성중" << endl;
+			playerinfo.hp = 150;
+			playerinfo.attack = 10;
+			playerinfo.defence = 5;
+			break;
+		}
+		else if (playerinfo.Type == PT_Archer) {
+			cout << "궁수 생성중" << endl;
+			playerinfo.hp = 100;
+			playerinfo.attack = 15;
+			playerinfo.defence = 3;
+			break;
+		}
+		else if (playerinfo.Type == PT_Mage) {
+			cout << "마법사 생성중" << endl;
+			playerinfo.hp = 80;
+			playerinfo.attack = 25;
+			playerinfo.defence = 0;
+			break;
+		}
+	}
+}
 
-	int main()
-	{
-		int a = 3;
-		int b = 4;
+void  EnterField() {
+	while (1) {
 
-		int sum = SUM(a, b);
+		cout << "----------------------" << endl;
+		cout << "필드에 입장했습니다." << endl;
+		cout << "----------------------" << endl;
 
-		int sub = SUB(a, b);
+		cout << "[플레이어] hp:" << playerinfo.hp << " ATT:" << playerinfo.attack << " DEF:" << playerinfo.defence << endl;
 
-		int sub2 = SUB(b, a);
+		CreateMonster();
 
-		int mul = MUL(a, b);
-
-		cout << sum << " " << sub << " " << sub2 << " " << mul << endl;
-
-		return 0;
+		cout << "----------------------" << endl;
+		cout << "전투(1) 도주(2)" << endl;
+		cout << ">";
+		int input;
+		cin >> input;
+		if (input == 1) {
+			EnterBettle();
+			if (playerinfo.hp == 0) {
+				return;
+			}
+		}
+		else {
+			return;
+		}
 	}
 
 
-	// 함수를 호출할때 esp레지스터를 확인한 후 그 주소로 가서 메모리를 까보면
-	// 그 주소 위로 스택프레임이 올라가는 것을 확인할 수 있다.
-	// 매개변수 값이 올라가고 그 다음 반환주소값(함수가 끝난 후 그 아래 다음코드줄 주소)이 올라가고
-	// ebp push로 베이스포인터가 올라간 후 마지막에 함수 안의 지역변수 값이 올라간다.
+}
+
+void CreateMonster() {
+
+	cout << "몬스터 생성중" << endl;
+
+	srand(time(NULL));
+	monsterinfo.Type = 1 + rand() % 3;
+
+	switch (monsterinfo.Type) {
+
+	case MT_Slime:
+		cout << "슬라임 생성중(hp=15/ATT=5/DEF=0)" << endl;
+		monsterinfo.hp = 15;
+		monsterinfo.attack = 5;
+		monsterinfo.defence = 0;
+		break;
+	case MT_Orc:
+		cout << "오크 생성중(hp=40/ATT=10/DEF=3)" << endl;
+		monsterinfo.hp = 40;
+		monsterinfo.attack = 10;
+		monsterinfo.defence = 3;
+		break;
+	case MT_Skeleton:
+		cout << "스켈레톤 생성중(hp=80/ATT=15/DEF=5)" << endl;
+		monsterinfo.hp = 80;
+		monsterinfo.attack = 15;
+		monsterinfo.defence = 5;
+		break;
+	}
+
+}
+
+void EnterBettle() {
+
+	while (1) {
+
+		int playerDamage = (playerinfo.attack - monsterinfo.defence);
+
+		int monsterDamage = (monsterinfo.attack - playerinfo.defence);
+
+		if (playerDamage < 0) {
+			playerDamage = 0;
+		}
+		if (monsterDamage < 0) {
+			monsterDamage = 0;
+		}
+
+		monsterinfo.hp -= playerDamage;
+
+		if (monsterinfo.hp < 0) {
+			monsterinfo.hp = 0;
+		}
+
+		cout << "남은 몬스터 hp:" << monsterinfo.hp << endl;
+
+		if (monsterinfo.hp == 0) {
+			cout << "몬스터를 처치하였습니다. 플레이어 승리" << endl;
+			return;
+		}
+		else {
+			playerinfo.hp -= monsterDamage;
+			if (playerinfo.hp < 0) {
+				playerinfo.hp = 0;
+			}
+			cout << "남은 플레이어 hp:" << playerinfo.hp << endl;
+			if (playerinfo.hp == 0) {
+				cout << "사망했습니다.로비에서 다시 부활합니다." << endl;
+				return;
+			}
+
+		}
+	}
+}
 
 
 
