@@ -2,212 +2,88 @@
 #include <time.h>
 using namespace std;
 
-
-//// text RPG
-
-#pragma region 전역변수
-enum PlayerType {
-	PT_Kinght = 1,
-	PT_Archer = 2,
-	PT_Mage = 3
+struct Player {
+    int hp;
+    int damage;
 };
-enum MonsterType {
-	MT_Slime = 1,
-	MT_Orc = 2,
-	MT_Skeleton = 3
-};
-// 구조체 사용
-struct Objectinfo {
-	int Type;
-	int hp;
-	int attack;
-	int defence;
-};
-
-Objectinfo playerinfo;
-Objectinfo monsterinfo;
-
-#pragma endregion
-
-#pragma region 함수선언
-void EnterLobby();
-void SelectPlayer();
-void EnterField();
-void CreateMonster();
-void EnterBettle();
-#pragma endregion
-
 
 int main()
 {
 
-	EnterLobby();
+    // 지금까지 사용한 방식
+    // number라는 이름의 4바이트 바구니를 생성
+    // number 변수는 스택 메모리에 할당
+    // number라는 바구니에 1이라는 값을 넣음
+    // 변수는 모두 바구니이고 바구니마다 주소가 있고 바구니안에는 어떤 값을 저장할수있다.
 
-	return 0;
+    int number = 1;
 
+    // 다른 함수에서 main함수내에서 선언된 지역변수인 number를 조작할수없다.
+    // 이떄 포인터 변수를 이용하면 그것이 가능하다.
+
+
+    // 포인터는 주소를 저장하는 바구니이다.
+    // 즉 바구니들의 주소에 접근할수있다.
+    // *변수이름 >> 지역변수의 주소록에 접근하여 그 주소에 해당되는 바구니 안의 값까지 조작가능하다.
+    // 주소값을 저장하는 포인터도 자기자신의 주소값이 있으며 
+    // 포인터의 주소를 저장하는 것이 이중포인터이다.
+    // 포인터라는 바구니는 4바이트 or 8바이트 고정크기이다.
+
+    int* ptr;        // 포인터 변수의 선언
+
+    ptr = &number;   // ptr에게 number바구니의 주소를 가리키도록 한다.
+
+    *ptr = 2;        // *ptr은 가리키고 있는 주소의 바구니 안에 있는 값을 2로 변경한다.
+
+
+    // 포인터 변수의 타입
+
+    // 포인터 변수를 어떤 주소로 지정하고나서
+    // *P 문법을 이용해 값을 조작할때 
+    // type이 일치해야 올바른 조작이 가능하기 떄문에
+    // type을 맞춰 주어야한다.
+
+    //////// 포인터 연산
+
+    //// 1) 주소 연산자(&)
+
+
+    //// 2) 산술 연산자
+
+    // (+ -)
+
+    number += 1;  // 1증가
+
+
+    // ptr += 1;   // 주소가 4증가했다?
+
+    // 포인터에서 1을 더하거나 뺴는 것은 
+    // (type의 크기)x 1 만큼 이동하라는 의미
+    // 다음 주소로 1번 넘어가라는 뜻이다.
+    // 바구니 단위의 이동
+
+    //// 3) 간접 연산자(*)
+
+    // 간접참조를 할 수 있는 연산자
+    // 포탈을 타고 써있는 주소로 이동!
+
+    *ptr = 3;    // number = 3; 과 같은 효과를 낸다.
+
+    //// 4) 간접 멤버 연산자(->)
+
+    Player P1;
+    P1.hp = 100;
+    P1.damage = 10;
+
+    Player* P1ptr = &P1;
+
+    // 구조체 포인터에서 간접 연산자 사용시  (*P1ptr).hp = 100 ; 
+    // * 과 . 을 합쳐서 -> 로 표현 
+    // structPtr -> hp = 100 ;   으로 표현가능
+
+    (*P1ptr).hp = 200;
+
+    P1ptr->damage = 20;
+
+    return 0;
 }
-
-
-
-void EnterLobby() {
-
-	while (1) {
-		cout << "----------------------" << endl;
-		cout << "로비에 입장하였습니다." << endl;
-		cout << "----------------------" << endl;
-
-		SelectPlayer();
-
-		cout << "----------------------" << endl;
-		cout << "(1)필드입장 (2)게임종료" << endl;
-		cout << "----------------------" << endl;
-
-		int input;
-		cin >> input;
-		if (input == 1) {
-			EnterField();
-		}
-		else {
-			return;
-		}
-	}
-}
-
-void SelectPlayer()
-{
-	while (1) {
-		cout << "----------------------" << endl;
-		cout << "직업을 선택해주세요." << endl;
-		cout << "기사(1) 궁수(2) 마법사(3)" << endl;
-		cout << "----------------------" << endl;
-		cout << ">";
-		cin >> playerinfo.Type;
-		if (playerinfo.Type == PT_Kinght) {
-			cout << "기사 생성중" << endl;
-			playerinfo.hp = 150;
-			playerinfo.attack = 10;
-			playerinfo.defence = 5;
-			break;
-		}
-		else if (playerinfo.Type == PT_Archer) {
-			cout << "궁수 생성중" << endl;
-			playerinfo.hp = 100;
-			playerinfo.attack = 15;
-			playerinfo.defence = 3;
-			break;
-		}
-		else if (playerinfo.Type == PT_Mage) {
-			cout << "마법사 생성중" << endl;
-			playerinfo.hp = 80;
-			playerinfo.attack = 25;
-			playerinfo.defence = 0;
-			break;
-		}
-	}
-}
-
-void  EnterField() {
-	while (1) {
-
-		cout << "----------------------" << endl;
-		cout << "필드에 입장했습니다." << endl;
-		cout << "----------------------" << endl;
-
-		cout << "[플레이어] hp:" << playerinfo.hp << " ATT:" << playerinfo.attack << " DEF:" << playerinfo.defence << endl;
-
-		CreateMonster();
-
-		cout << "----------------------" << endl;
-		cout << "전투(1) 도주(2)" << endl;
-		cout << ">";
-		int input;
-		cin >> input;
-		if (input == 1) {
-			EnterBettle();
-			if (playerinfo.hp == 0) {
-				return;
-			}
-		}
-		else {
-			return;
-		}
-	}
-
-
-}
-
-void CreateMonster() {
-
-	cout << "몬스터 생성중" << endl;
-
-	srand(time(NULL));
-	monsterinfo.Type = 1 + rand() % 3;
-
-	switch (monsterinfo.Type) {
-
-	case MT_Slime:
-		cout << "슬라임 생성중(hp=15/ATT=5/DEF=0)" << endl;
-		monsterinfo.hp = 15;
-		monsterinfo.attack = 5;
-		monsterinfo.defence = 0;
-		break;
-	case MT_Orc:
-		cout << "오크 생성중(hp=40/ATT=10/DEF=3)" << endl;
-		monsterinfo.hp = 40;
-		monsterinfo.attack = 10;
-		monsterinfo.defence = 3;
-		break;
-	case MT_Skeleton:
-		cout << "스켈레톤 생성중(hp=80/ATT=15/DEF=5)" << endl;
-		monsterinfo.hp = 80;
-		monsterinfo.attack = 15;
-		monsterinfo.defence = 5;
-		break;
-	}
-
-}
-
-void EnterBettle() {
-
-	while (1) {
-
-		int playerDamage = (playerinfo.attack - monsterinfo.defence);
-
-		int monsterDamage = (monsterinfo.attack - playerinfo.defence);
-
-		if (playerDamage < 0) {
-			playerDamage = 0;
-		}
-		if (monsterDamage < 0) {
-			monsterDamage = 0;
-		}
-
-		monsterinfo.hp -= playerDamage;
-
-		if (monsterinfo.hp < 0) {
-			monsterinfo.hp = 0;
-		}
-
-		cout << "남은 몬스터 hp:" << monsterinfo.hp << endl;
-
-		if (monsterinfo.hp == 0) {
-			cout << "몬스터를 처치하였습니다. 플레이어 승리" << endl;
-			return;
-		}
-		else {
-			playerinfo.hp -= monsterDamage;
-			if (playerinfo.hp < 0) {
-				playerinfo.hp = 0;
-			}
-			cout << "남은 플레이어 hp:" << playerinfo.hp << endl;
-			if (playerinfo.hp == 0) {
-				cout << "사망했습니다.로비에서 다시 부활합니다." << endl;
-				return;
-			}
-
-		}
-	}
-}
-
-
-
