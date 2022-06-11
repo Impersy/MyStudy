@@ -2,88 +2,93 @@
 #include <time.h>
 using namespace std;
 
-struct Player {
+// 포인터 실습
+// text RPG 
+
+struct Statinfo {             // Statinfo는 자료형   >> 변수 선언 한게 아님
     int hp;
-    int damage;
+    int attack;
+    int defence;
 };
+
+
+void EnterLobby();
+
+Statinfo CreatePlayer();              // 포인터를 사용하지 않는 함수라 Playerstat값은 못 건드리고
+                                      // 따로 지역변수를 만들어 값을 설정하고 그걸 반환해줌
+
+void CreateMonster(Statinfo* info);   // 구조체 포인터로 주소값을 받아 Monsterstat을 설정가능
+
+bool StartBettle(Statinfo* player, Statinfo* monster);
 
 int main()
 {
-
-    // 지금까지 사용한 방식
-    // number라는 이름의 4바이트 바구니를 생성
-    // number 변수는 스택 메모리에 할당
-    // number라는 바구니에 1이라는 값을 넣음
-    // 변수는 모두 바구니이고 바구니마다 주소가 있고 바구니안에는 어떤 값을 저장할수있다.
-
-    int number = 1;
-
-    // 다른 함수에서 main함수내에서 선언된 지역변수인 number를 조작할수없다.
-    // 이떄 포인터 변수를 이용하면 그것이 가능하다.
-
-
-    // 포인터는 주소를 저장하는 바구니이다.
-    // 즉 바구니들의 주소에 접근할수있다.
-    // *변수이름 >> 지역변수의 주소록에 접근하여 그 주소에 해당되는 바구니 안의 값까지 조작가능하다.
-    // 주소값을 저장하는 포인터도 자기자신의 주소값이 있으며 
-    // 포인터의 주소를 저장하는 것이 이중포인터이다.
-    // 포인터라는 바구니는 4바이트 or 8바이트 고정크기이다.
-
-    int* ptr;        // 포인터 변수의 선언
-
-    ptr = &number;   // ptr에게 number바구니의 주소를 가리키도록 한다.
-
-    *ptr = 2;        // *ptr은 가리키고 있는 주소의 바구니 안에 있는 값을 2로 변경한다.
-
-
-    // 포인터 변수의 타입
-
-    // 포인터 변수를 어떤 주소로 지정하고나서
-    // *P 문법을 이용해 값을 조작할때 
-    // type이 일치해야 올바른 조작이 가능하기 떄문에
-    // type을 맞춰 주어야한다.
-
-    //////// 포인터 연산
-
-    //// 1) 주소 연산자(&)
-
-
-    //// 2) 산술 연산자
-
-    // (+ -)
-
-    number += 1;  // 1증가
-
-
-    // ptr += 1;   // 주소가 4증가했다?
-
-    // 포인터에서 1을 더하거나 뺴는 것은 
-    // (type의 크기)x 1 만큼 이동하라는 의미
-    // 다음 주소로 1번 넘어가라는 뜻이다.
-    // 바구니 단위의 이동
-
-    //// 3) 간접 연산자(*)
-
-    // 간접참조를 할 수 있는 연산자
-    // 포탈을 타고 써있는 주소로 이동!
-
-    *ptr = 3;    // number = 3; 과 같은 효과를 낸다.
-
-    //// 4) 간접 멤버 연산자(->)
-
-    Player P1;
-    P1.hp = 100;
-    P1.damage = 10;
-
-    Player* P1ptr = &P1;
-
-    // 구조체 포인터에서 간접 연산자 사용시  (*P1ptr).hp = 100 ; 
-    // * 과 . 을 합쳐서 -> 로 표현 
-    // structPtr -> hp = 100 ;   으로 표현가능
-
-    (*P1ptr).hp = 200;
-
-    P1ptr->damage = 20;
+    EnterLobby();
 
     return 0;
+}
+
+void EnterLobby() {
+
+    cout << "-----------------------" << endl;
+    cout << "로비에 입장했습니다." << endl;
+
+    Statinfo Playerstat;
+    Playerstat = CreatePlayer();            // 함수의 반환값을 Playerstat으로 지정
+
+    Statinfo Monsterstat;
+    CreateMonster(&Monsterstat);            // 함수에서 Monsterstat을 변경함
+
+    bool victory = StartBettle(&Playerstat, &Monsterstat);
+
+    if (victory == 1) {
+        cout << "승리" << endl;
+    }
+    else {
+        cout << "패배" << endl;
+    }
+
+}
+
+Statinfo CreatePlayer() {
+    cout << "플레이어 생성" << endl;
+    Statinfo ret;
+    ret.hp = 120;
+    ret.attack = 19;
+    ret.defence = 3;
+
+    return ret;
+}
+
+void CreateMonster(Statinfo* info) {
+    cout << "몬스터 생성" << endl;
+    info->hp = 100;
+    info->attack = 20;
+    info->defence = 4;
+}
+
+bool StartBettle(Statinfo* player, Statinfo* monster) {
+
+    while (1) {
+        int pdmg = player->attack - monster->defence;
+        int mdmg = monster->attack - player->defence;
+        monster->hp -= pdmg;
+        if (monster->hp < 0) {
+            monster->hp = 0;
+        }
+        cout << "몬스터 hp:" << monster->hp << endl;
+        if (monster->hp == 0) {
+            cout << "몬스터를 처치하였습니다." << endl;
+            return 1;
+        }
+        player->hp -= mdmg;
+        if (player->hp < 0) {
+            player->hp = 0;
+        }
+        cout << "플레이어 hp:" << player->hp << endl;
+        if (player->hp == 0) {
+            cout << "사망했습니다." << endl;
+            return 0;
+        }
+    }
 }
